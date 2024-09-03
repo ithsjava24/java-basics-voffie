@@ -1,9 +1,57 @@
 package org.example;
 
-import java.util.Scanner;
+import java.util.*;
+
+class PriceData {
+    private final String date;
+    private final int price;
+
+    public String getDate() {
+        return date;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    @Override
+    public String toString() {
+        return (this.getDate() + " " + this.getPrice() + " öre");
+    }
+
+    public PriceData(String date, int price) {
+    this.date = date;
+    this.price = price;
+    }
+}
 
 public class App {
-    public static Scanner scanner = new Scanner(System.in);
+    static List<PriceData> data = new ArrayList<>() {{
+        add(new PriceData("00-01", 0));
+        add(new PriceData("01-02", 0));
+        add(new PriceData("02-03", 0));
+        add(new PriceData("03-04",0));
+        add(new PriceData("04-05",0));
+        add(new PriceData("05-06",0));
+        add(new PriceData("06-07",0));
+        add(new PriceData("07-08",0));
+        add(new PriceData("08-09",0));
+        add(new PriceData("09-10",0));
+        add(new PriceData("10-11",0));
+        add(new PriceData("11-12",0));
+        add(new PriceData("12-13",0));
+        add(new PriceData("13-14",0));
+        add(new PriceData("14-15",0));
+        add(new PriceData("15-16",0));
+        add(new PriceData("16-17",0));
+        add(new PriceData("17-18",0));
+        add(new PriceData("18-19",0));
+        add(new PriceData("19-20",0));
+        add(new PriceData("20-21",0));
+        add(new PriceData("21-22",0));
+        add(new PriceData("22-23",0));
+        add(new PriceData("23-24",0));
+    }};
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
