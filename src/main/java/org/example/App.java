@@ -6,7 +6,10 @@ public class App {
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        String intro = """
+        Scanner scanner = new Scanner(System.in);
+        boolean exit = false;
+        while (!exit) {
+            System.out.print("""
                 Elpriser
                 ========
                 1. Inmatning
@@ -15,15 +18,12 @@ public class App {
                 4. Bästa Laddningstid (4h)
                 5. Visualisering
                 e. Avsluta
-                """;
-        boolean exit = false;
-        while (!exit) {
-            System.out.print(intro);
+                """);
             String action = scanner.nextLine();
 
             switch (action) {
-                case "E", "e" -> exit = true;
-                case "1" -> addData();
+                case "e", "E" -> exit = true;
+                case "1" -> addData(scanner);
                 case "2" -> fancyPrint();
                 case "3" -> sortData();
                 case "4" -> bestCharge();
