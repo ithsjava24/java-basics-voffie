@@ -2,28 +2,7 @@ package org.example;
 
 import java.util.*;
 
-class PriceData {
-    private final String date;
-    private final int price;
-
-    public String getDate() {
-        return date;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    @Override
-    public String toString() {
-        return (this.getDate() + " " + this.getPrice() + " öre");
-    }
-
-    public PriceData(String date, int price) {
-    this.date = date;
-    this.price = price;
-    }
-}
+record PriceData(String date, int price) {}
 
 public class App {
     static List<PriceData> data = new ArrayList<>() {{
@@ -81,25 +60,26 @@ public class App {
     }
 
     public static void addData(Scanner scanner) {
-        data.replaceAll(priceData -> new PriceData(priceData.getDate(), scanner.nextInt()));
+        data.replaceAll(priceData -> new PriceData(priceData.date(), scanner.nextInt()));
         scanner.nextLine();
     }
     public static void minMaxAverage() {
-        PriceData highest = Collections.max(data, Comparator.comparingInt(PriceData::getPrice));
-        PriceData lowest = Collections.min(data, Comparator.comparingInt(PriceData::getPrice));
-        float sum = data.stream().mapToInt(PriceData::getPrice).sum();
+        PriceData highest = Collections.max(data, Comparator.comparingInt(PriceData::price));
+        PriceData lowest = Collections.min(data, Comparator.comparingInt(PriceData::price));
+        float sum = data.stream().mapToInt(PriceData::price).sum();
         float average = sum / (data.size());
         System.out.printf("""
                 Lägsta pris: %s, %s öre/kWh
                 Högsta pris: %s, %s öre/kWh
                 Medelpris: %.2f öre/kWh
-                """, lowest.getDate(), lowest.getPrice(), highest.getDate(), highest.getPrice(), average);
+                """, lowest.date(), lowest.price(), highest.date(), highest.price(), average);
     }
     public static void sortData() {
         List<PriceData> sorted = new ArrayList<>(data);
-        Collections.copy(sorted, data);
-        sorted.sort(Comparator.comparingInt(PriceData::getPrice).reversed());
-        System.out.println(sorted.toString());
+        sorted.sort(Comparator.comparingInt(PriceData::price).reversed());
+        for (PriceData data : sorted) {
+            System.out.println(data.date() + " " + data.price() + " öre");
+        }
     }
     public static void bestCharge() {
         System.out.println("best charge");
