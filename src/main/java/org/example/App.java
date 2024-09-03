@@ -82,7 +82,14 @@ public class App {
         }
     }
     public static void bestCharge() {
-        System.out.println("best charge");
+        List<PriceData> sorted = new ArrayList<>(data);
+        sorted.sort(Comparator.comparingInt(PriceData::price));
+        float sum = sorted.stream().limit(4).mapToInt(PriceData::price).sum();
+        float average = sum / 4f;
+        System.out.printf("""
+                Påbörja laddning klockan %s
+                Medelpris 4h: %.2f öre/kWh
+                """, sorted.getFirst().date().substring(0, 2), average);
     }
     public static void visualizeData() {
         System.out.println("visualize data");
