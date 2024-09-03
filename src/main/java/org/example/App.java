@@ -32,8 +32,9 @@ public class App {
         }
     }
 
-    public static void addData() {
-        System.out.println("Add data");
+    public static void addData(Scanner scanner) {
+        data.replaceAll(priceData -> new PriceData(priceData.getDate(), scanner.nextInt()));
+        scanner.nextLine();
     }
     public static void fancyPrint() {
         System.out.println("fancy print");
