@@ -96,7 +96,10 @@ public class App {
                 """, lowest.getDate(), lowest.getPrice(), highest.getDate(), highest.getPrice(), average);
     }
     public static void sortData() {
-        System.out.println("sort data");
+        List<PriceData> sorted = new ArrayList<>(data);
+        Collections.copy(sorted, data);
+        sorted.sort(Comparator.comparingInt(PriceData::getPrice).reversed());
+        System.out.println(sorted.toString());
     }
     public static void bestCharge() {
         System.out.println("best charge");
