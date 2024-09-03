@@ -72,7 +72,7 @@ public class App {
             switch (action) {
                 case "e", "E" -> exit = true;
                 case "1" -> addData(scanner);
-                case "2" -> fancyPrint();
+                case "2" -> minMaxAverage();
                 case "3" -> sortData();
                 case "4" -> bestCharge();
                 case "5" -> visualizeData();
@@ -84,8 +84,16 @@ public class App {
         data.replaceAll(priceData -> new PriceData(priceData.getDate(), scanner.nextInt()));
         scanner.nextLine();
     }
-    public static void fancyPrint() {
-        System.out.println("fancy print");
+    public static void minMaxAverage() {
+        PriceData highest = Collections.max(data, Comparator.comparingInt(PriceData::getPrice));
+        PriceData lowest = Collections.min(data, Comparator.comparingInt(PriceData::getPrice));
+        float sum = data.stream().mapToInt(PriceData::getPrice).sum();
+        float average = sum / (data.size());
+        System.out.printf("""
+                Lägsta pris: %s, %s öre/kWh
+                Högsta pris: %s, %s öre/kWh
+                Medelpris: %.2f öre/kWh
+                """, lowest.getDate(), lowest.getPrice(), highest.getDate(), highest.getPrice(), average);
     }
     public static void sortData() {
         System.out.println("sort data");
