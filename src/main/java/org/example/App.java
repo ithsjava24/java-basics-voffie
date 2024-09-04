@@ -88,7 +88,7 @@ public class App {
         float average = sum / 4f;
         System.out.printf("""
                 Påbörja laddning klockan %s
-                Medelpris 4h: %.2f öre/kWh
+                Medelpris 4h: %.1f öre/kWh
                 """, sorted.getFirst().date().substring(0, 2), average);
     }
     public static void visualizeData() {
