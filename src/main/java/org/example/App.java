@@ -78,7 +78,7 @@ public class App {
         List<PriceData> sorted = new ArrayList<>(data);
         sorted.sort(Comparator.comparingInt(PriceData::price).reversed());
         for (PriceData data : sorted) {
-            System.out.println(data.date() + " " + data.price() + " öre");
+            System.out.print(data.date() + " " + data.price() + " öre\n");
         }
     }
     public static void bestCharge() {
