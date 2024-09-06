@@ -101,7 +101,7 @@ public class App {
         final int MIN = Collections.min(data, Comparator.comparingInt(PriceData::price)).price();
         final int ROW_COUNT = 6;
         final int COLUMN_COUNT = data.size();
-        final int DIFFERENCE = (MAX - MIN) / (ROW_COUNT - 1);
+        final float DIFFERENCE = (MAX - MIN) / (ROW_COUNT - 1f);
 
         for (int i = ROW_COUNT; i > 0; i--) {
             StringBuilder output = new StringBuilder();
