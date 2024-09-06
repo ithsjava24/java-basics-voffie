@@ -105,20 +105,26 @@ public class App {
 
         for (int i = ROW_COUNT; i > 0; i--) {
             StringBuilder output = new StringBuilder();
-            int lowerBound = (i == 1) ? MIN : MAX - (ROW_COUNT - i) * DIFFERENCE;
+            int lowerBound = (i == 1) ? MIN : (int) (MAX - (ROW_COUNT - i) * DIFFERENCE);
+
+            int MAX_LENGTH = Integer.toString(MAX).length();
+            int MIN_LENGTH = Integer.toString(MIN).length();
+            int longest = Math.max(MAX_LENGTH, MIN_LENGTH);
 
             if (i == ROW_COUNT) {
-                output.append("   ").append(MAX).append("|  ");
+                String spaces = MAX_LENGTH < longest ? addSpaces(longest - MAX_LENGTH) : "";
+                output.append(spaces).append(MAX).append("|");
             } else if (i == 1) {
-                output.append(" ").append(MIN).append("|  ");
+                String spaces = MIN_LENGTH < longest ? addSpaces(longest - MIN_LENGTH) : "";
+                output.append(spaces).append(MIN).append("|");
             } else {
-                output.append("   |  ");
+                output.append(addSpaces(longest)).append("|");
             }
 
             for (int j = 0; j < COLUMN_COUNT; j++) {
                 int currentPrice = data.get(j).price();
                 if (currentPrice >= lowerBound) {
-                    output.append("x  ");
+                    output.append("  x");
                 } else {
                     output.append("   ");
                 }
@@ -128,5 +134,9 @@ public class App {
 
         System.out.print("   |------------------------------------------------------------------------\n");
         System.out.print("   | 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n");
+    }
+
+    static String addSpaces(int amount) {
+        return " ".repeat(Math.max(0, amount));
     }
 }
