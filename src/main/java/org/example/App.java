@@ -34,6 +34,7 @@ public class App {
     }};
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.of("sv", "SE"));
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
@@ -70,11 +71,11 @@ public class App {
         PriceData lowest = Collections.min(data, Comparator.comparingInt(PriceData::price));
         float sum = data.stream().mapToInt(PriceData::price).sum();
         float average = sum / (data.size());
-        System.out.printf(Locale.of("sv", "SE"), """
+        System.out.printf("""
                 Lägsta pris: %s, %s öre/kWh
                 Högsta pris: %s, %s öre/kWh
-                Medelpris: %s öre/kWh
-                """, lowest.hour(), formatLocaleNumber(lowest.price()), highest.hour(), formatLocaleNumber(highest.price()), formatLocaleNumber(average));
+                Medelpris: %.2f öre/kWh
+                """, lowest.hour(), lowest.price(), highest.hour(), highest.price(), average);
     }
 
     public static void sortData() {
@@ -90,7 +91,7 @@ public class App {
         sorted.sort(Comparator.comparingInt(PriceData::price));
         float sum = sorted.stream().limit(4).mapToInt(PriceData::price).sum();
         float average = sum / 4f;
-        System.out.printf(Locale.of("sv", "SE"), """
+        System.out.printf("""
                 Påbörja laddning klockan %s
                 Medelpris 4h: %.1f öre/kWh
                 """, sorted.getFirst().hour().substring(0, 2), average);
@@ -138,12 +139,5 @@ public class App {
 
     static String addSpaces(int amount) {
         return " ".repeat(Math.max(0, amount));
-    }
-
-    static String formatLocaleNumber(int number) {
-        return Integer.toString(number);
-    }
-    static String formatLocaleNumber(float number) {
-        return String.format("%.2f", number).replace(".", ",");
     }
 }
