@@ -153,7 +153,20 @@ public class App {
     }
 
     static float bestAveragePriceSpan(List<PriceData> data, int span) {
-        float sum = data.stream().limit(span).mapToInt(PriceData::price).sum();
+        if (data.size() < span) {
+         throw new IllegalArgumentException("Span is to big");
+        }
+
+        int sum = 0;
+        for (int i = 0; i < span; i++) {
+            sum += data.get(i).price();
+        }
+        int currentSum = sum;
+        for (int i = span; i < data.size(); i++) {
+            currentSum += data.get(i).price() - data.get(i - span).price();
+            sum = Math.min(sum, currentSum);
+        }
+
         return sum / (float) span;
     }
 
