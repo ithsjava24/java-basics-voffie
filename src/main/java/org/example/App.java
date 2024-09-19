@@ -67,39 +67,34 @@ public class App {
     }
 
     public static void minMaxAverage() {
-        PriceData highest = Collections.max(data, Comparator.comparingInt(PriceData::price));
-        PriceData lowest = Collections.min(data, Comparator.comparingInt(PriceData::price));
-        float sum = data.stream().mapToInt(PriceData::price).sum();
-        float average = sum / (data.size());
+        PriceData min = min();
+        PriceData max = max();
         System.out.printf("""
                 Lägsta pris: %s, %s öre/kWh
                 Högsta pris: %s, %s öre/kWh
                 Medelpris: %.2f öre/kWh
-                """, lowest.hour(), lowest.price(), highest.hour(), highest.price(), average);
+                """, min.hour(), min.price(), max.hour(), max.price(), average(data));
     }
 
     public static void sortData() {
-        List<PriceData> sorted = new ArrayList<>(data);
-        sorted.sort(Comparator.comparingInt(PriceData::price).reversed());
+        List<PriceData> sorted = sortValues(true);
         for (PriceData data : sorted) {
             System.out.print(data.hour() + " " + data.price() + " öre\n");
         }
     }
 
     public static void bestCharge() {
-        List<PriceData> sorted = new ArrayList<>(data);
-        sorted.sort(Comparator.comparingInt(PriceData::price));
-        float sum = sorted.stream().limit(4).mapToInt(PriceData::price).sum();
-        float average = sum / 4f;
+        List<PriceData> sorted = sortValues(false);
         System.out.printf("""
                 Påbörja laddning klockan %s
                 Medelpris 4h: %.1f öre/kWh
-                """, sorted.getFirst().hour().substring(0, 2), average);
+                """, sorted.getFirst().hour().substring(0, 2), averageOfFour(sorted));
     }
 
     public static void visualizeData() {
-        final int MAX = Collections.max(data, Comparator.comparingInt(PriceData::price)).price();
-        final int MIN = Collections.min(data, Comparator.comparingInt(PriceData::price)).price();
+        final int MAX = max().price();
+        final int MIN = min().price();
+
         final int ROW_COUNT = 6;
         final int COLUMN_COUNT = data.size();
         final float DIFFERENCE = (MAX - MIN) / (ROW_COUNT - 1f);
@@ -135,6 +130,36 @@ public class App {
 
         System.out.print("   |------------------------------------------------------------------------\n");
         System.out.print("   | 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n");
+    }
+
+    // Util methods
+
+    static PriceData max() {
+        return Collections.max(data, Comparator.comparingInt(PriceData::price));
+    }
+
+    static PriceData min() {
+        return Collections.min(data, Comparator.comparingInt(PriceData::price));
+    }
+
+    static List<PriceData> sortValues(boolean reversed) {
+        List<PriceData> sorted = new ArrayList<>(data);
+        if (reversed) {
+            sorted.sort(Comparator.comparingInt(PriceData::price).reversed());
+        } else {
+            sorted.sort(Comparator.comparingInt(PriceData::price));
+        }
+        return sorted;
+    }
+
+    static float averageOfFour(List<PriceData> data) {
+        float sum = data.stream().limit(4).mapToInt(PriceData::price).sum();
+        return sum / 4f;
+    }
+
+    static float average(List<PriceData> data) {
+        float sum = data.stream().mapToInt(PriceData::price).sum();
+        return sum / data.size();
     }
 
     static String addSpaces(int amount) {
