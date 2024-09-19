@@ -88,7 +88,7 @@ public class App {
         System.out.printf("""
                 Påbörja laddning klockan %s
                 Medelpris 4h: %.1f öre/kWh
-                """, sorted.getFirst().hour().substring(0, 2), averageOfFour(sorted));
+                """, sorted.getFirst().hour().substring(0, 2), bestAveragePriceSpan(sorted, 4));
     }
 
     public static void visualizeData() {
@@ -152,9 +152,9 @@ public class App {
         return sorted;
     }
 
-    static float averageOfFour(List<PriceData> data) {
-        float sum = data.stream().limit(4).mapToInt(PriceData::price).sum();
-        return sum / 4f;
+    static float bestAveragePriceSpan(List<PriceData> data, int span) {
+        float sum = data.stream().limit(span).mapToInt(PriceData::price).sum();
+        return sum / (float) span;
     }
 
     static float average(List<PriceData> data) {
