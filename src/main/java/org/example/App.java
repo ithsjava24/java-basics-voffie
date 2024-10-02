@@ -84,7 +84,7 @@ public class App {
     }
 
     public static void bestCharge() {
-        bestAveragePriceSpan(data, 4);
+        System.out.print(bestAveragePriceSpan(data, 4));
     }
 
     public static void visualizeData() {
@@ -144,7 +144,7 @@ public class App {
         return sorted;
     }
 
-    static void bestAveragePriceSpan(List<PriceData> data, int span) {
+    static String bestAveragePriceSpan(List<PriceData> data, int span) {
         double minAverage = Double.MAX_VALUE;
         String startTime = data.getFirst().hour();
 
@@ -161,8 +161,7 @@ public class App {
             sum = sum - data.get(i).price() + data.get(i + span).price();
         }
 
-
-        System.out.printf("""
+        return String.format("""
                 Påbörja laddning klockan %s
                 Medelpris 4h: %.1f öre/kWh
                 """, startTime.substring(0, 2), minAverage);
