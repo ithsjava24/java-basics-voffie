@@ -94,27 +94,26 @@ public class App {
         final int ROW_COUNT = 6;
         final int COLUMN_COUNT = data.size();
         final float DIFFERENCE = (MAX - MIN) / (ROW_COUNT - 1f);
+        int MAX_LENGTH = Integer.toString(MAX).length();
+        int MIN_LENGTH = Integer.toString(MIN).length();
+        int longest = Math.max(MAX_LENGTH, MIN_LENGTH);
 
-        for (int i = ROW_COUNT; i > 0; i--) {
+        for (int row = ROW_COUNT; row > 0; row--) {
             StringBuilder output = new StringBuilder();
-            int lowerBound = (i == 1) ? MIN : (int) (MAX - (ROW_COUNT - i) * DIFFERENCE);
+            int lowerBound = (row == 1) ? MIN : (int) (MAX - (ROW_COUNT - row) * DIFFERENCE);
 
-            int MAX_LENGTH = Integer.toString(MAX).length();
-            int MIN_LENGTH = Integer.toString(MIN).length();
-            int longest = Math.max(MAX_LENGTH, MIN_LENGTH);
-
-            if (i == ROW_COUNT) {
+            if (row == ROW_COUNT) {
                 String spaces = MAX_LENGTH < longest ? addSpaces(longest - MAX_LENGTH) : "";
                 output.append(spaces).append(MAX).append("|");
-            } else if (i == 1) {
+            } else if (row == 1) {
                 String spaces = MIN_LENGTH < longest ? addSpaces(longest - MIN_LENGTH) : "";
                 output.append(spaces).append(MIN).append("|");
             } else {
                 output.append(addSpaces(longest)).append("|");
             }
 
-            for (int j = 0; j < COLUMN_COUNT; j++) {
-                int currentPrice = data.get(j).price();
+            for (int column = 0; column < COLUMN_COUNT; column++) {
+                int currentPrice = data.get(column).price();
                 if (currentPrice >= lowerBound) {
                     output.append("  x");
                 } else {
@@ -124,8 +123,8 @@ public class App {
             System.out.print(output + "\n");
         }
 
-        System.out.print("   |------------------------------------------------------------------------\n");
-        System.out.print("   | 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n");
+        System.out.print(addSpaces(longest) + "|------------------------------------------------------------------------\n");
+        System.out.print(addSpaces(longest) + "| 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n");
     }
 
     // Util methods
@@ -173,6 +172,6 @@ public class App {
     }
 
     static String addSpaces(int amount) {
-        return " ".repeat(Math.max(0, amount));
+        return " ".repeat(amount);
     }
 }
