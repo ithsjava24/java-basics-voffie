@@ -70,25 +70,21 @@ public class App {
         PriceData min = min();
         PriceData max = max();
         System.out.printf("""
-                Lägsta pris: %s, %s öre/kWh
-                Högsta pris: %s, %s öre/kWh
+                Lägsta pris: %s, %d öre/kWh
+                Högsta pris: %s, %d öre/kWh
                 Medelpris: %.2f öre/kWh
                 """, min.hour(), min.price(), max.hour(), max.price(), average(data));
     }
 
     public static void sortData() {
-        List<PriceData> sorted = sortValues(true);
+        List<PriceData> sorted = sortValues();
         for (PriceData data : sorted) {
             System.out.print(data.hour() + " " + data.price() + " öre\n");
         }
     }
 
     public static void bestCharge() {
-        List<PriceData> sorted = sortValues(false);
-        System.out.printf("""
-                Påbörja laddning klockan %s
-                Medelpris 4h: %.1f öre/kWh
-                """, sorted.getFirst().hour().substring(0, 2), bestAveragePriceSpan(sorted, 4));
+        bestAveragePriceSpan(data, 4);
     }
 
     public static void visualizeData() {
@@ -142,32 +138,34 @@ public class App {
         return Collections.min(data, Comparator.comparingInt(PriceData::price));
     }
 
-    static List<PriceData> sortValues(boolean reversed) {
+    static List<PriceData> sortValues() {
         List<PriceData> sorted = new ArrayList<>(data);
-        if (reversed) {
-            sorted.sort(Comparator.comparingInt(PriceData::price).reversed());
-        } else {
-            sorted.sort(Comparator.comparingInt(PriceData::price));
-        }
+        sorted.sort(Comparator.comparingInt(PriceData::price).reversed());
         return sorted;
     }
 
-    static float bestAveragePriceSpan(List<PriceData> data, int span) {
-        if (data.size() < span) {
-         throw new IllegalArgumentException("Span is to big");
-        }
+    static void bestAveragePriceSpan(List<PriceData> data, int span) {
+        double minAverage = Double.MAX_VALUE;
+        String startTime = data.getFirst().hour();
 
-        int sum = 0;
+        double sum = 0;
         for (int i = 0; i < span; i++) {
             sum += data.get(i).price();
         }
-        int currentSum = sum;
-        for (int i = span; i < data.size(); i++) {
-            currentSum += data.get(i).price() - data.get(i - span).price();
-            sum = Math.min(sum, currentSum);
+
+        for (int i = 0; i < data.size() - span; i++) {
+            if (sum / span < minAverage) {
+                minAverage = sum / span;
+                startTime = data.get(i).hour();
+            }
+            sum = sum - data.get(i).price() + data.get(i + span).price();
         }
 
-        return sum / (float) span;
+
+        System.out.printf("""
+                Påbörja laddning klockan %s
+                Medelpris 4h: %.1f öre/kWh
+                """, startTime.substring(0, 2), minAverage);
     }
 
     static float average(List<PriceData> data) {
